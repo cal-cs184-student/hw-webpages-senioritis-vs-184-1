@@ -28,15 +28,15 @@
 	<body>
 		<div class="container">
 		<h1>CS184/284A Spring 2025 Homework 1 Write-Up</h1>
-		<div style="text-align: center;">Names: </div>
+		<div style="text-align: center;">Names: Ashley Kao</div>
 
 		<br>
 
-		Link to webpage: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+		Link to webpage: <a href="https://cal-cs184-student.github.io/hw-webpages-senioritis-vs-184-1">https://cal-cs184-student.github.io/hw-webpages-senioritis-vs-184-1</a>
 		
 		<br>
 
-		Link to GitHub repository: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+		Link to GitHub repository: <a href="https://github.com/cal-cs184-student/sp25-hw1-senioritis-vs-184">https://github.com/cal-cs184-student/sp25-hw1-senioritis-vs-184</a>
 
 		<figure>
 			<img src="lion.jpg" alt="Lion" style="width:50%"/>
@@ -48,39 +48,92 @@
 		-->
 
 		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+		In Homework 1, we implemented a simple vector graphics renderer that can draw triangles, supersample, transform, and texture map.
 
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<!--
+			<img src="lion.jpg" width="400px"/>
+		-->
+		I rasterize triangles by iterating over its surrounding box, checking each point for whether it meets the three-line test requirement (either all &le; 0 or all &ge; 0 to account for the two possible winding orders). Finally, if the three-line test condition is met, the pixel in the sample buffer is filled with the color passed in as an argument.
 
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
+		In my implementation, I calculate the max and min of the passed in vertex coordinates, which form a tight box around the triangle. I then only iterate within these bounds. Since I calculate the bounding box directly in my code, my algorithm by definition is no worse than one that checks each sample within the bounding box of the triangle.
+
+		figure>
+			<img src="task1screenshot.png" alt="Triangles" style="width:50%"/>
+			<figcaption>An interesting part of the scene: a detached vertex.</figcaption>
+		</figure>
+
+		Optimizations:
+
+		Unoptimized implementation: 0.001418s
+
+		Redundant arithmetic operations factored out: 0.001011s
+
+		Now that I look at my implementation, I may have included minimal memory accesses by default (the minimal amount of accesses is to fill pixels a number of times equal to the number of pixels in the triangle). My code already does this rather than filling with white in the "three line test failed" case.
+		
+		<h2>Task 2: Antialiasing by Supersampling</h2>
+		In my supersampling algorithm, rather than iterating over entire pixels at once, I iterate over the subpixels and color in the corresponding subpixel in the sample buffer if the three line test condition is met. Afterwards, when resolving to framebuffer, I iterate over each pixel's subpixels and average
+		the colors of each subpixel to obtain the overall pixel's color. Finally, the color is converted from the sample buffer's format to the format expected by the rgb frame buffer.
+		Supersampling is useful because standard sampling could lead to aliasing in the output image (e.g. jaggies, broken tips), which can be unpleasant or confusing to the user.
+		To implement supersampling, I had to adjust all references to the sample buffer to incorporate the sample rate, as each cell has to be referred to with an integer value.
+		In addition to the modifications to the loops mentioned previously, I added the averaging portion of supersampling into resolve_to_framebuffer, so averaging is automatically done when the method is called.
+		Supersampling allows for "blurring" of images, making features such as jaggies and broken tips less prominent. For example, a red triangle with jaggies will have its edges blurred with lighter reds by supersampling, making the jaggies less prominent.
+
+		<p>Here are the screenshots of basic/test4.svg with default viewing parameters. I have included sample rate 9 to fill up the four boxes.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="task2_rate1.png" width="400px"/>
+				  <figcaption>Sample Rate: 1</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="task2_rate4.png" width="400px"/>
+				  <figcaption>Sample Rate: 4</figcaption>
 				</td>
 			  </tr>
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="task2_rate9.png" width="400px"/>
+				  <figcaption>Sample Rate: 9</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="task2_rate16.png" width="400px"/>
+				  <figcaption>Sample Rate: 16</figcaption>
 				</td>
 			  </tr>
 			</table>
 		</div>
-		
-		<h2>Task 2: Antialiasing by Supersampling</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+		As sample rate goes up, the detached corner appears to "reattach" itself to the triangle when viewed with the naked eye, though it is still somewhat detached in the pixel viewer.
+		This happens because supersampling blurring allows intermediate shades of red to be populated in the pixels between the vertex and the rest of the triangle, thus causing the viewer to see that the vertex is now attached to the rest of the triangle.
+
+		Extra Credit: I implemented jitter sampling. Rather than always sampling from the middle of the pixel, I randomly generate an x and y offset, which I use to get the sample. This method of sampling is still heavily grid-based, but introduces randomness.
+		<p>Here are the screenshots of basic/test4.svg with default viewing parameters. I have included sample rate 9 to fill up the four boxes.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="jitter_rate1.png" width="400px"/>
+				  <figcaption>Sample Rate: 1</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="jitter_rate4.png" width="400px"/>
+				  <figcaption>Sample Rate: 4</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="jitter_rate9.png" width="400px"/>
+				  <figcaption>Sample Rate: 9</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="jitter_rate16.png" width="400px"/>
+				  <figcaption>Sample Rate: 16</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
 		<h2>Task 3: Transforms</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
