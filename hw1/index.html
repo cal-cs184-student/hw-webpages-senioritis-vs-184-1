@@ -143,7 +143,16 @@
 
 		<h2>Task 4: Barycentric coordinates</h2>
 
-		Barycentric coordinates are 
+		Barycentric coordinates allow us to interpolate positions or values within a triangle using a linear combination of three known positions or values.
+		The vertices of the triangles are used to calculate weights for the three known values. Here's an image of a triangle with one red, one green, and one blue vertex:
+
+		<figure>
+			<img src="task4triangle.png" alt="color interpolated triangle" style="width:50%"/>
+			<figcaption>Triangle with one red, one green, and one blue corner.</figcaption>
+		</figure>
+
+		Notice in the triangle above that only the vertices themselves start out with colors. We use barycentric coordinates to combine the colors of these vertices according
+		to some calculated weights to determine what color each point in the triangle should be.
 
 		<figure>
 			<img src="task4screenshot.png" alt="color gradient wheel" style="width:50%"/>
