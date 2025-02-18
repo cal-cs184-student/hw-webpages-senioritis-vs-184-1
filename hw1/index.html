@@ -146,26 +146,36 @@
 		</figure>
 
 		<br>
-		<b>Extra Credit:</b> I implemented a simple 90 degree counterclockwise rotation keybind.
-		<p>Here are the screenshots of basic/test6.svg before and after 'R' was pressed.</p>
+		<b>Extra Credit:</b> I implemented two keybinds: one for 90 degree counterclockwise rotation and one for 90 degree clockwise rotation.
+		<p>Here are the screenshots of basic/test6.svg before and after the keypresses. 'A' is for counterclockwise and 'D' is for clockwise rotation.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
 				  <img src="task3_ec_before.png" width="400px"/>
-				  <figcaption>Sample Rate: 1</figcaption>
+				  <figcaption>Before 'A'</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="task3_ec_after.png" width="400px"/>
-				  <figcaption>Sample Rate: 4</figcaption>
+				  <img src="task3_ec_aftera.png" width="400px"/>
+				  <figcaption>After 'A'</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task3_ec_before.png" width="400px"/>
+				  <figcaption>Before 'D'</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task3_ec_afterd.png" width="400px"/>
+				  <figcaption>After 'D'</figcaption>
 				</td>
 			  </tr>
 			</table>
 		</div>
 
-		I added the rotate_view method stub to drawrend.h, which allowed me to access the svg_to_ndc from the rotate_view method in drawrend.cpp.
-		In rotate_view, I modify the viewing transform matrix of the current svg by adding in the transform matrix from earlier in this task. Finally, I added an additional
-		case in keyboard_event's switch statement to begin detecting 'R' keypresses.
+		I added the rotate_view method stub to drawrend.h, which allowed me to access the svg_to_ndc object from the rotate_view method in drawrend.cpp.
+		In rotate_view, I modify the viewing transform matrix of the current svg by adding in the transform matrix from earlier in this task. Finally, I added two additional
+		cases in keyboard_event's switch statement to begin detecting 'A' and 'D' keypresses. In these two cases, they call the rotate_view method and redraw the image.
 
 		<h2>Task 4: Barycentric coordinates</h2>
 
