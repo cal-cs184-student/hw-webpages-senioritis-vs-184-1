@@ -54,9 +54,11 @@
 		<!--
 			<img src="lion.jpg" width="400px"/>
 		-->
-		I rasterize triangles by iterating over its surrounding box, checking each point for whether it meets the three-line test requirement (either all &le; 0 or all &ge; 0 to account for the two possible winding orders). Finally, if the three-line test condition is met, the pixel in the sample buffer is filled with the color passed in as an argument.
+		I rasterize triangles by iterating over its surrounding box, checking each pixel's sample for whether it meets the three-line test requirement (either all &le; 0 or all &ge; 0 to account for the two possible winding orders). Finally, if the three-line test condition is met, the pixel in the sample buffer is filled with the color passed in as an argument.
 
 		In my implementation, I calculate the max and min of the passed in vertex coordinates, which form a tight box around the triangle. I then only iterate within these bounds. Since I calculate the bounding box directly in my code, my algorithm by definition is no worse than one that checks each sample within the bounding box of the triangle.
+
+		Below is a screenshot of basic/test4.svg with basic viewing parameters and pixel inspector open.
 
 		<figure>
 			<img src="task1screenshot.png" alt="Triangles" style="width:50%"/>
@@ -109,6 +111,11 @@
 
 		As sample rate goes up, the detached corner appears to "reattach" itself to the triangle when viewed with the naked eye, though it is still somewhat detached in the pixel viewer.
 		This happens because supersampling blurring allows intermediate shades of red to be populated in the pixels between the vertex and the rest of the triangle, thus causing the viewer to see that the vertex is now attached to the rest of the triangle.
+
+		<br>
+		This was the most challenging part for me to implement because of some hard-to-detect rounding and overflow issues that would show up as the shapes being extremely diluted in color. This was ultimately resolved by iterating over whole numbers instead of the individual supersampled minipixels and converting any remaining floating point numbers to doubles.
+		I ended up moving the sample buffer filling for triangles out of fill_pixel as well.
+
 		<br>
 		<b>Extra Credit:</b> I implemented jitter sampling. Rather than always sampling from the middle of the pixel, I randomly generate an x and y offset, which I use to get the sample. This method of sampling is still heavily grid-based, but introduces randomness.
 		<p>Here are the screenshots of basic/test4.svg with default viewing parameters. I have included sample rate 9 to fill up the four boxes.</p>
@@ -144,7 +151,7 @@
 			<img src="my-robot.png" alt="cubeman touching grass" style="width:50%"/>
 			<figcaption>Cubeman is touching grass :&#40;</figcaption>
 		</figure>
-
+		My main reference was the lecture slides. Overall, this part was pretty straightforward. The only issue I encountered was figuring out how to index into the matrix: apparently it's column-row and not row-column like most other array-like structures.
 		<br>
 		<b>Extra Credit:</b> I implemented two keybinds: one for 90 degree counterclockwise rotation and one for 90 degree clockwise rotation.
 		<p>Here are the screenshots of basic/test6.svg before and after the keypresses. 'A' is for counterclockwise and 'D' is for clockwise rotation.</p>
@@ -189,6 +196,9 @@
 
 		Notice in the triangle above that only the vertices themselves start out with colors. We use barycentric coordinates to combine the colors of these vertices according
 		to some calculated weights to determine what color each point in the triangle should be.
+
+		My implementation uses the equations on slide 23 of Lecture 5. The amount of changes made for this task was small; they include the calculation of alpha, beta, and gamma, and a modification of what happens in the case the three-line test is satisfied.
+		Here, we use the result of the barycentric coordinate formula as the color to be added to the sample buffer. I did not encounter any problems during this task.
 
 		<figure>
 			<img src="task4screenshot.png" alt="color gradient wheel" style="width:50%"/>
@@ -235,6 +245,8 @@
 		This happens because nearest sampling only takes the texture color of its one closest neighbor whereas bilinear is able to use the four closest pixels on top of linear interpolation, which enhances its ability to produce intermediate colors.
 		It's similar to supersampling, where the more samples you take per pixel, the better the blurring.
 
+		My implementation for this subpart builds upon the implementation from Task 4, with some small tweaks. Here, we must sample from the texture and use the sample result as the color to be added to the sample buffer. I didn't encounter any issues in this task; the biggest challenge was understanding what to do on a conceptual level.
+
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
 		Level sampling is similar to the sampling mentioned in Task 5, except instead of always sampling textures from the original, full resolution texture, we sample textures from various mipmap levels.
 		This was implemented for texture mapping determining which level the passed in partial derivatives corresponded to according to a mathematical formula. Then, when performing nearest or bilinear sampling, this calculated level would be used to determine which mipmap level to obtain a texture pixel color from.
@@ -265,6 +277,10 @@
 			</table>
 		</div>
 		Notice the difference in jaggies and blurring of the gradient wingtip.
+		<br>
+		My implementation is a modification of that of Task 5. Additions include calculations of the partial derivatives, which are included in the object passed in to the sample method, and additional cases in the sample method for the type of level calculation used.
+		This was probably the second hardest task for me due to small bugs. The biggest problem I encountered were random color pixels, which were caused by bad rounding, and segfaults, which were caused by an off-by-one in the clamping of level values.
+		Fortunately I was able to find the bugs.
 
 		<h2>(Optional) Task 7: Extra Credit - Draw Something Creative!</h2>
 		N/A
