@@ -138,10 +138,34 @@
 		</div>
 
 		<h2>Task 3: Transforms</h2>
+		In Task 3, I implemented transform matrices for translations, scaling, and rotating. This allowed for proper rendering of cubeman.
+		I then adjusted the transform matrices applied to cubeman to get the result below.
 		<figure>
 			<img src="my-robot.png" alt="cubeman touching grass" style="width:50%"/>
 			<figcaption>Cubeman is touching grass :&#40;</figcaption>
 		</figure>
+
+		<br>
+		<b>Extra Credit:</b> I implemented a simple 90 degree counterclockwise rotation keybind.
+		<p>Here are the screenshots of basic/test6.svg before and after 'R' was pressed.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task3_ec_before.png" width="400px"/>
+				  <figcaption>Sample Rate: 1</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task3_ec_after.png" width="400px"/>
+				  <figcaption>Sample Rate: 4</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+		I added the rotate_view method stub to drawrend.h, which allowed me to access the svg_to_ndc from the rotate_view method in drawrend.cpp.
+		In rotate_view, I modify the viewing transform matrix of the current svg by adding in the transform matrix from earlier in this task. Finally, I added an additional
+		case in keyboard_event's switch statement to begin detecting 'R' keypresses.
 
 		<h2>Task 4: Barycentric coordinates</h2>
 
