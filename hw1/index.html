@@ -190,6 +190,14 @@
 			  </tr>
 			</table>
 		</div>
+		It's a little hard to tell from the shrunk screenshots but in this area of high color contrast, the hands of the clock are a little more "blurred" in the bilinear images vs the nearest images.
+		When viewed in the pixel viewer, the end of the minutes hand is a bit detached from the rest of the arm in the nearest screenshots whereas it is almost blurred back together in the bilinear sampling images.
+		Additionally, the darker lines of the Campanile are more jagged in the nearest sampling images. This does allow for better representation of the numbers on the clock face, however.
+		There isn't very much difference between the sample rate 1 and sample rate 16 images, except for a handful of pixels that change color for greater blurring effect.
+
+		There will be a large difference between nearest and bilinear sampling in images with very thin, high color contrast details similar to the Campanile example above.
+		This happens because nearest sampling only takes the texture color of its one closest neighbor whereas bilinear is able to use the four closest pixels on top of linear interpolation, which enhances its ability to produce intermediate colors.
+		It's similar to supersampling, where the more samples you take per pixel, the better the blurring.
 
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
