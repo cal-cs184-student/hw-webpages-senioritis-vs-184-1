@@ -62,7 +62,8 @@
 			<img src="task1screenshot.png" alt="Triangles" style="width:50%"/>
 			<figcaption>An interesting part of the scene: a detached vertex.</figcaption>
 		</figure>
-
+		<br>
+		<b>Extra Credit:</b>
 		Optimizations:
 
 		Unoptimized implementation: 0.001418s
@@ -107,8 +108,8 @@
 
 		As sample rate goes up, the detached corner appears to "reattach" itself to the triangle when viewed with the naked eye, though it is still somewhat detached in the pixel viewer.
 		This happens because supersampling blurring allows intermediate shades of red to be populated in the pixels between the vertex and the rest of the triangle, thus causing the viewer to see that the vertex is now attached to the rest of the triangle.
-
-		Extra Credit: I implemented jitter sampling. Rather than always sampling from the middle of the pixel, I randomly generate an x and y offset, which I use to get the sample. This method of sampling is still heavily grid-based, but introduces randomness.
+		<br>
+		<b>Extra Credit:</b> I implemented jitter sampling. Rather than always sampling from the middle of the pixel, I randomly generate an x and y offset, which I use to get the sample. This method of sampling is still heavily grid-based, but introduces randomness.
 		<p>Here are the screenshots of basic/test4.svg with default viewing parameters. I have included sample rate 9 to fill up the four boxes.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
@@ -231,18 +232,8 @@
 		Notice the difference in jaggies and blurring of the gradient wingtip.
 
 		<h2>(Optional) Task 7: Extra Credit - Draw Something Creative!</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		N/A
 
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
-			</li>
-		</ul>
 		</div>
 	</body>
 </html>
