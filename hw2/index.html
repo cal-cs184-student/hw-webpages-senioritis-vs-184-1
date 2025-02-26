@@ -139,10 +139,67 @@
 		</div>
 
 		<h3>Part 4: Edge flip</h3>
-		Debugging journey: Fortunately this one had relatively few bugs. The only bugs I had were not updating the halfedges of the faces and forgetting to change the return value of the function from the default.
+		I implemented edge flips by first drawing out the expected behavior on paper, as recommended in the spec. I made note of what every attribute of every involved element should be after the flip. I also noted whether the attribute changed, so if it was unchanged I could exclude it from the code.
+		In the code itself, I took my diagram and set up all the necessary FaceIter, VertexIter, and HalfedgeIter objects then read off my diagram to update the necessary attributes. Diagram not provided but available upon request.
+
+		Fortunately this one had relatively few bugs because I made sure to double check my diagram before starting implementation. The only bugs I had were not updating the halfedges of the faces and forgetting to change the return value of the function from the default.
+
+		<p>dae/teapot.dae before and after some edge flips</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task4-before.png" width="400px"/>
+				  <figcaption>Before.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task4-after.png" width="400px"/>
+				  <figcaption>After.</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
 		<h3>Part 5: Edge split</h3>
-		Debugging journey: Luckily I had sketched this problem extensively on paper before coding so I didn't have any errors with the overall reassignments. The two bugs I had were a typo in one of the pointer reassignments that caused the code to crash after exiting the method and a miscalculation of the midpoint.
+		Like Part 4, I started this part by first drawing out the expected behavior on paper and writing down what each element's attributes should be before and after the split (which allows me to see which reassignments I can safely omit from the code.)
+		Once I had finished my diagram and double checked it, I set up the required FaceIters, VertexIters, HalfedgeIters, and EdgeIters. I also created the new vertex, two new faces, three new edges, and six new halfedges.
+		I first updated the attributes of existing elements. Only once that was complete did I update the attributes of the newly created objects. Finally, I set the new midpoint vertex's halfedge to point along the split edge and return it, as requested by the comments in the skeleton.
+		Because I had sketched this problem extensively on paper before coding so I didn't have any errors with the overall reassignments. The two bugs I had were a typo in one of the pointer reassignments that caused the code to crash after exiting the method and a miscalculation of the midpoint.
+
+		<p>dae/teapot.dae before and after some edge splits</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task4-before.png" width="400px"/>
+				  <figcaption>Before.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task5-some-edge-splits.png" width="400px"/>
+				  <figcaption>After.</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+		<p>dae/teapot.dae before and after a combination of edge splits and edge flips</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task4-before.png" width="400px"/>
+				  <figcaption>Before.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task5-some-edge-splits-flips.png" width="400px"/>
+				  <figcaption>After.</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+		There are some odd behaviors that arise when flipping the non-diagonal edges of the mesh; namely, some edges appear to "vanish"/overlap and some triangles become much darker than the ones surrounding them.
+		According to Ed, this is a degenerate case. Since there are no holes in my mesh and all the halfedges appear to be pointing in the proper direction, I guess this is fine.
 
 		<h3>Part 6: Loop subdivision for mesh upsampling</h3>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
