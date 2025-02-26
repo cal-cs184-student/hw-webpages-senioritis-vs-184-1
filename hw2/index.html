@@ -28,15 +28,15 @@
 	<body>
 		<div class="container">
 		<h1>CS184/284A Spring 2025 Homework 2 Write-Up</h1>
-		<div style="text-align: center;">Names: </div>
+		<div style="text-align: center;">Names: Ashley Kao</div>
 
 		<br>
 
-		Link to webpage: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+		Link to webpage: <a href="https://cal-cs184-student.github.io/hw-webpages-senioritis-vs-184-1">https://cal-cs184-student.github.io/hw-webpages-senioritis-vs-184-1</a>
 
 		<br>
 		
-		Link to GitHub repository: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+		Link to GitHub repository: <a href="https://github.com/cal-cs184-student/sp25-hw2-senioritis-vs-184-hw2/tree/main">https://github.com/cal-cs184-student/sp25-hw2-senioritis-vs-184-hw2/tree/main</a>
 
 		<figure>
 			<img src="teapot.png" alt="Teapot" style="width:50%"/>
@@ -48,34 +48,55 @@
 		-->
 
 		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+		This homework has two main portions: the first is Bezier Curves and Surfaces (including de Casteljau's algorithm) whereas the second deals with modifications of the triangles comprising the mesh.
 
 		<h2>Section I: Bezier Curves and Surfaces</h2>
 
 		<h3>Part 1: Bezier curves with 1D de Casteljau subdivision</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		de Casteljau's is an algorithm which, given control points and a parameter, uses recursive linear interpolation to determine points on a Bezier curve at the given parameter.
+		I implemented de Casteljau's algorithm for a single recursive step by taking in the input control points and calculating (1 - t) * p_i + t * (i + 1) for each pair, then passing these calculated control points for the next recursive layer as the return value.
 
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
+		<p>Here are the screenshots of a Bezier curve with 6 chosen control points.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="bezier-6controlpoints-initial.png" width="400px"/>
+				  <figcaption>Screen after running Meshedit, without any keys pressed.</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="bezier-6controlpoints-Ctoggled.png" width="400px"/>
+				  <figcaption>Screen after toggling C to show the completed Bezier curve.</figcaption>
 				</td>
 			  </tr>
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="bezier-6controlpoints-1.png" width="400px"/>
+				  <figcaption>Screen after pressing E once.</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="bezier-6controlpoints-2.png" width="400px"/>
+				  <figcaption>Screen after pressing E twice.</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="bezier-6controlpoints-3.png" width="400px"/>
+				  <figcaption>Screen after pressing E three times.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="bezier-6controlpoints-4.png" width="400px"/>
+				  <figcaption>Screen after pressing E four times.</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="bezier-6controlpoints-5.png" width="400px"/>
+				  <figcaption>Screen after pressing E five times.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="bezier-6controlpoints-slightlydifferent.png" width="400px"/>
+				  <figcaption>A slightly different Bezier curve, with shifted control points and a modified parameter t.</figcaption>
 				</td>
 			  </tr>
 			</table>
@@ -90,10 +111,10 @@
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 		<h3>Part 4: Edge flip</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		Debugging journey: Fortunately this one had relatively few bugs. The only bugs I had were not updating the halfedges of the faces and forgetting to change the return value of the function from the default.
 
 		<h3>Part 5: Edge split</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		Debugging journey: Luckily I had sketched this problem extensively on paper before coding so I didn't have any errors with the overall reassignments. The two bugs I had were a typo in one of the pointer reassignments that caused the code to crash after exiting the method and a miscalculation of the midpoint.
 
 		<h3>Part 6: Loop subdivision for mesh upsampling</h3>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
