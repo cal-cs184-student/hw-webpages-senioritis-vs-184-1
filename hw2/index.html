@@ -118,7 +118,25 @@
 		<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
 
 		<h3>Part 3: Area-weighted vertex normals</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		I implemented area-weighted vertex normals by starting with the halfedge stored in the current Vertex object. I then iterate over faces incident to the vertex.
+		For every face encountered this way, I find its area by taking the norm of the cross product of the halfedge vertices' locations and multiplying it by 0.5.
+		I then add the product of the face's normal and area to the sum of previously explored faces' area-weighted normals. Finally, I normalize the sum to get the area-weighted normal at the given vertex.
+
+		<p>dae/teapot.dae with and without vertex normals</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task3noq.png" width="400px"/>
+				  <figcaption>Teapot without vertex normals (default flat shading).</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task3afterq.png" width="400px"/>
+				  <figcaption>Teapot with vertex normals (Phong shading).</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
 		<h3>Part 4: Edge flip</h3>
 		Debugging journey: Fortunately this one had relatively few bugs. The only bugs I had were not updating the halfedges of the faces and forgetting to change the return value of the function from the default.
