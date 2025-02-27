@@ -237,7 +237,8 @@
 			</table>
 		</div>
 
-		To reduce the smoothing effect of subdivision, I split some edges in the torus input mesh.
+		Notice that after two subdivisions, the torus looks like a ring. 
+		To reduce the smoothing effect of subdivision, I split some edges in the torus input mesh. Screenshots are provided below.
 
 		<p>dae/torus/input.dae before and after loop subdivision.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
@@ -275,7 +276,9 @@
 			</table>
 		</div>
 
-		The cube "stretches" a little diagonally with subdivisions, in the diagonal without the edge traversing it.
+		Loop subdivision was also performed on dae/cube.dae. Similar to the torus, the cube smooths out with each subdivision.
+		However, the cube also "stretches" a little diagonally with subdivisions, in the diagonal without the edge traversing it.
+		In the screenshots below, you can see the cube take on a lemon-like shape.
 
 		<p>dae/cube.dae before and after loop subdivision.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
@@ -303,9 +306,12 @@
 			</table>
 		</div>
 		
-		These effects happen because 
+		These effects happen because loop subdivision works by subdividing each triangle in the mesh into four smaller triangles and flipping edges. 
+		In a mesh like cube.dae, where the faces are not symmetrical, this subdivision and edge flipping could result 
+		in unevenly sized triangle elements being formed, which cause distortion.
 
-		I preprocessed the cube by splitting the existing diagonal edge traversing each face.
+		To make the cube subdivide symmetrically, I preprocessed the cube by splitting the existing diagonal edge traversing each face.
+		This makes the cube face symmetric.
 
 		<p>dae/torus/input.dae before and after loop subdivision.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
