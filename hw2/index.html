@@ -202,21 +202,153 @@
 		According to Ed, this is a degenerate case. Since there are no holes in my mesh and all the halfedges appear to be pointing in the proper direction, I guess this is fine.
 
 		<h3>Part 6: Loop subdivision for mesh upsampling</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		I implemented loop subdivision by first iterating all vertices in the mesh, computing their new position based on their number of neighbors, original position, and a sum of their neighbors' positions. I additionally mark these vertices as "not New".
+		Next, since later edge splits will create new vertices without a newPosition, I iterate over all edges of the mesh and use a weighted sum of neighboring vertices' positions to calculate the newPosition stored within the edge.
+		Afterwards, I loop over all the (currently existing) edges in the mesh and split them, being careful to tag which edges are new and which ones aren't. Additionally, since we have a new vertex as a result of the edge split,
+		I mark the new midpoint vertex as New and set its newPosition according to the newPosition stored in the split edge. I iterate over the edges of the mesh a third time, this time flipping any edge connecting an old vertex with a new vertex.
+		Finally, I change all vertices' positions to their newPosition.
+
+		After loop subdivision, the mesh's sharp corners and edges become "smoothed", probably due to the creation of new vertices with each edge split.
+		Additionally, the mesh sometimes becomes deformed, depending on the placement of the mesh's triangles. For figures like the cube, isohedron, and torus, they gradually become spherical or circular, whichever is closer to the original shape.
+
+		<p>dae/torus/input.dae before and after loop subdivision.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task6-bullet2-before.png" width="400px"/>
+				  <figcaption>Before.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task6-bullet2-1.png" width="400px"/>
+				  <figcaption>After 1 subdivision.</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task6-bullet2-3.png" width="400px"/>
+				  <figcaption>After 2 subdivisions.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task6-bullet2-4.png" width="400px"/>
+				  <figcaption>After 3 subdivisions.</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+		To reduce the smoothing effect of subdivision, I split some edges in the torus input mesh.
+
+		<p>dae/torus/input.dae before and after loop subdivision.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task6-bullet2-torus-initial.png" width="400px"/>
+				  <figcaption>Before.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task6-bullet2-torus-edgesplits.png" width="400px"/>
+				  <figcaption>Before, with new split edges.</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task6-bullet2-torus-1.png" width="400px"/>
+				  <figcaption>After 1 subdivision.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task6-bullet2-torus-2.png" width="400px"/>
+				  <figcaption>After 2 subdivisions.</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task6-bullet2-torus-3.png" width="400px"/>
+				  <figcaption>After 3 subdivisions.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task6-bullet2-torus-4.png" width="400px"/>
+				  <figcaption>After 4 subdivisions.</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+		The cube "stretches" a little diagonally with subdivisions, in the diagonal without the edge traversing it.
+
+		<p>dae/cube.dae before and after loop subdivision.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task6-bullet3-cube-initial.png" width="400px"/>
+				  <figcaption>Before.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task6-bullet3-cube-1.png" width="400px"/>
+				  <figcaption>After 1 subdivision.</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task6-bullet3-cube-2.png" width="400px"/>
+				  <figcaption>After 2 subdivisions.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task6-bullet3-cube-3.png" width="400px"/>
+				  <figcaption>After 3 subdivisions.</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+		
+		These effects happen because 
+
+		I preprocessed the cube by splitting the existing diagonal edge traversing each face.
+
+		<p>dae/torus/input.dae before and after loop subdivision.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task6-bullet3-cube-initial.png" width="400px"/>
+				  <figcaption>Before.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task6-bullet3-cube-splits.png" width="400px"/>
+				  <figcaption>Before, with new split edges.</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task6-bullet3-cube-splits1.png" width="400px"/>
+				  <figcaption>After 1 subdivision.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task6-bullet3-cube-splits2.png" width="400px"/>
+				  <figcaption>After 2 subdivisions.</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task6-bullet3-cube-splits3.png" width="400px"/>
+				  <figcaption>After 3 subdivisions.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task6-bullet3-cube-3.png" width="400px"/>
+				  <figcaption>Non-processed cube after 3 subdivisions for comparison.</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+		My pre-processing alleviates the effects because I make sure there are an even amount of edges going in each of the cube's directions, which ensures splits are mirrored to each corner of the cube.
+		The equal splits prevents the distortion of the cube after upsampling.
 
 		<h2>(Optional) Section III: Potential Extra Credit - Art Competition: Model something Creative</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		N/A
 
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
-			</li>
-		</ul>
 		</div>
 	</body>
 </html>
