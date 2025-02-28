@@ -160,11 +160,14 @@
 			</table>
 		</div>
 
+		There are some odd behaviors that arise when flipping the non-diagonal edges of the mesh; namely, some edges appear to "vanish"/overlap and some triangles become much darker than the ones surrounding them.
+		According to Ed, this is a degenerate case. Since there are no holes in my mesh and all the halfedges appear to be pointing in the proper direction, I guess this is fine.
+
 		<h3>Part 5: Edge split</h3>
 		Like Part 4, I started this part by first drawing out the expected behavior on paper and writing down what each element's attributes should be before and after the split (which allows me to see which reassignments I can safely omit from the code.)
 		Once I had finished my diagram and double checked it, I set up the required FaceIters, VertexIters, HalfedgeIters, and EdgeIters. I also created the new vertex, two new faces, three new edges, and six new halfedges.
 		I first updated the attributes of existing elements. Only once that was complete did I update the attributes of the newly created objects. Finally, I set the new midpoint vertex's halfedge to point along the split edge and return it, as requested by the comments in the skeleton.
-		Because I had sketched this problem extensively on paper before coding so I didn't have any errors with the overall reassignments. The two bugs I had were a typo in one of the pointer reassignments that caused the code to crash after exiting the method and a miscalculation of the midpoint.
+		Because I had sketched this problem extensively on paper before coding, I didn't have any errors with the overall reassignments. The two bugs I had were a typo in one of the pointer reassignments that caused the code to crash after exiting the method and a miscalculation of the midpoint.
 
 		<p>dae/teapot.dae before and after some edge splits</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
@@ -197,9 +200,6 @@
 			  </tr>
 			</table>
 		</div>
-
-		There are some odd behaviors that arise when flipping the non-diagonal edges of the mesh; namely, some edges appear to "vanish"/overlap and some triangles become much darker than the ones surrounding them.
-		According to Ed, this is a degenerate case. Since there are no holes in my mesh and all the halfedges appear to be pointing in the proper direction, I guess this is fine.
 
 		<h3>Part 6: Loop subdivision for mesh upsampling</h3>
 		I implemented loop subdivision by first iterating all vertices in the mesh, computing their new position based on their number of neighbors, original position, and a sum of their neighbors' positions. I additionally mark these vertices as "not New".
@@ -307,11 +307,11 @@
 		</div>
 		
 		These effects happen because loop subdivision works by subdividing each triangle in the mesh into four smaller triangles and flipping edges. 
-		In a mesh like cube.dae, where the faces are not symmetrical, this subdivision and edge flipping could result 
-		in unevenly sized triangle elements being formed, which cause distortion.
+		In a mesh like cube.dae, where the placements of the triangles are not symmetrical, subdivision and edge flipping could result 
+		in unevenly sized triangle elements being formed on opposite sides of the mesh, which cause mesh distortion.
 
 		To make the cube subdivide symmetrically, I preprocessed the cube by splitting the existing diagonal edge traversing each face.
-		This makes the cube face symmetric.
+		A screenshot of the edge splits used for preprocessing is included below.
 
 		<p>dae/torus/input.dae before and after loop subdivision.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
@@ -350,7 +350,7 @@
 		</div>
 
 		My pre-processing alleviates the effects because I make sure there are an even amount of edges going in each of the cube's directions, which ensures splits are mirrored to each corner of the cube.
-		The equal splits prevents the distortion of the cube after upsampling.
+		The equal splits ensures the subdivions-created triangles are approximately the same in shape, size, and orientation on each side of the cube, thus preventing the stretching of the cube after upsampling.
 
 		<h2>(Optional) Section III: Potential Extra Credit - Art Competition: Model something Creative</h2>
 		N/A
