@@ -107,7 +107,88 @@
 		</div>
 		
 		<h2>Part 2: Bounding Volume Hierarchy</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		My BVH construction algorithm first constructs the bounding box of all primitives in the node. As my BVH's heuristic is average centroid,
+		I count up the number of primitives in the node and find the average centroid of these primitives at the same time. I then create a new node with 
+		the bounding box of all node primitives. If there are fewer than max_leaf_size primitives in the current node, we know our new node is a leaf node, 
+		so we set its start and end pointers with the start and end arguments passed in to the method. If there are > max_leaf_size primitives,
+		we need to find the left and right child of the node. In order to do so, we must split the primitives into two groups (one for the left subtree and one for the right subtree).
+		I choose the axis to split on based on which of x, y, or z of the overall bounding box is the largest. Once this is found, I compare the centroid of 
+		each primitive's bounding boxes. If the centroid[axis] is less than the splitting value, the primitive will go into the left subtree. Otherwise it goes into the right.
+		Finally I call the BVH construction method recursively with each list to get the left and right children. 
+
+		<p>Here are some images with normal shading generated from large .dae files.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="part2-lucy.png" width="400px"/>
+				  <figcaption>sky/CBlucy.dae</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="part2-beast.png" width="400px"/>
+				  <figcaption>meshedit/beast.dae</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="part2-dragon.png" width="400px"/>
+				  <figcaption>sky/CBdragon.dae</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="part2-blob.png" width="400px"/>
+				  <figcaption>sky/blob.dae</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+		There were noticeable speedups when BVH was used versus when it wasn't.
+		<p>Here are some images with normal shading generated from large .dae files.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="part2-banana-nobvh.png" width="400px"/>
+				  <figcaption>keenan/banana.dae without BVH</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="part2-banana-bvh.png" width="400px"/>
+				  <figcaption>keenan/banana.dae with BVH</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="part2-cow-nobvh.png" width="400px"/>
+				  <figcaption>meshedit/cow.dae without BVH</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="part2-cow-bvh.png" width="400px"/>
+				  <figcaption>meshedit/cow.dae with BVH</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="part2-coil-nobvh.png" width="400px"/>
+				  <figcaption>sky/CBcoil.dae without BVH</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="part2-coil-bvh.png" width="400px"/>
+				  <figcaption>sky/CBcoil.dae with BVH</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="part2-cbbunny-nobvh.png" width="400px"/>
+				  <figcaption>sky/CBbunny.dae</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="part2-cbbunny-bvh.png" width="400px"/>
+				  <figcaption>sky/CBbunny.dae</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
 
 		<h2>Part 3: Direct Illumination</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
