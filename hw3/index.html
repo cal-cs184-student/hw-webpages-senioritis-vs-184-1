@@ -142,7 +142,12 @@
 			</table>
 		</div>
 
-		There were noticeable speedups when BVH was used versus when it wasn't.
+		There were noticeable speedups when BVH was used versus when it wasn't. Larger files would frequently take minutes
+		to render without the BVH, whereas they would only take less than a tenth of a second with the BVH. Exact time differences
+		for four different medium-sized scenes can be seen in the table below. This happens because in the non-BVH implementation,
+		the code must iterate through every primitive in the singular node, which is very costly when there are a lot of primitives (such as in large meshes).
+		The benefit of a BVH is that only leaf nodes hold a small group of primitives and subtrees that the ray doesn't intersect are skipped entirely,
+		so significantly fewer primitives are traversed. The scene is thus able to be rendered much more quickly.
 		<p>Here are some images with normal shading generated from large .dae files.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
@@ -179,11 +184,11 @@
 			  <tr>
 				<td style="text-align: center;">
 				  <img src="part2-cbbunny-nobvh.png" width="400px"/>
-				  <figcaption>sky/CBbunny.dae</figcaption>
+				  <figcaption>sky/CBbunny.dae without BVH</figcaption>
 				</td>
 				<td style="text-align: center;">
 				  <img src="part2-cbbunny-bvh.png" width="400px"/>
-				  <figcaption>sky/CBbunny.dae</figcaption>
+				  <figcaption>sky/CBbunny.dae with BVH</figcaption>
 				</td>
 			  </tr>
 			</table>
