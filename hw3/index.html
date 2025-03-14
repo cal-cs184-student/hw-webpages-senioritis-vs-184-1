@@ -278,8 +278,14 @@
 			  </tr>
 			</table>
 		</div>
+		As the number of light rays increases, the amount of noise decreases. However, the scene also takes longer to render.
+		l = 1 had the most noise and the bunny's shadow was spread out and unfocused. It also appeared to be black regardless of how far it was from the bunny.
+		l = 64 had the least noise (and smoothest result), with a nicely blended shadow around the bunny that decreases in darkness
+		the further away it is from the bunny.
 		
 		<!-- Compare the results between uniform hemisphere sampling and lighting sampling in one paragraph -->
+		 In general, lighting sampling produces cleaner results with more nicely blended shadows and less noise than uniform hemisphere sampling.
+		 However, lighting sampling is slower than uniform hemisphere sampling, which is especially for large amounts of light rays.
 
 		<h2>Part 4: Global Illumination</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
