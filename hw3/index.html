@@ -196,7 +196,65 @@
 
 
 		<h2>Part 3: Direct Illumination</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<!-- Walk through both implementations of the direct lighting function -->
+		 I first set up the BSDF for diffuse materials as it would be used throughout Part 3. The decision to divide by pi 
+		 was made from Discussion 07, where BRDF was given as rho / pi. For direct lighting with uniform hemisphere sampling,
+		 I make numLights * samplesPerLight samples total, as we are doing Monte Carlo sampling. For each sample, I sample over the hemisphere to get an object space
+		 vector for the input direction vector w_in. I use this w_in to create a ray to see if it intersects a light source. If 
+		 it does, I calculate the outgoing light using the reflection equation. At the end, I average the sum of the samples' outgoing light 
+		 to get the estimated overall outgoing light.
+
+		 Light sampling differs from hemisphere sampling in that we are sampling from the scene's lights rather than uniformly overa hemisphere.
+		 We iterate over the scene's lights, taking one sample if the current light is a point light source and ns_area_light samples otherwise.
+		 Calling sample_L on the light gives us the resulting radiance, w_in, distance to the light from the hit point, and the pdf corresponding to the sampled direction.
+		 Before we substitute these values into the reflection equation, we need to check whether there is an object between the light and the scene in the sample direction (if 
+		 there is, the scene will be in the shadow for this direction and no light will be added). Only once we've verified that there is no intersection 
+		 do we calculate the outgoing light for the current sample. Once all samples for the current light have been taken, we average them to get the Monte Carlo 
+		 estimate for the light. At the very end once all lights have been iterated over, we sum up the estimates for each light to get the overall estimatated outgoing light.
+
+		<!-- Show images rendered with both implementations of the direct lighting function -->
+		<p>Here are some images rendered using the direct lighting functions.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="CBbunny_H_16_8.png" width="400px"/>
+				  <figcaption>sky/CBbunny.dae using uniform hemisphere sampling</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="CBbunny_16_8.png" width="400px"/>
+				  <figcaption>sky/CBbunny.dae with light sampling</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="CBspheresl_H_16_8.png" width="400px"/>
+				  <figcaption>sky/CBspheres_lambertian.dae with uniform hemisphere sampling</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="CBspheresl_16_8.png" width="400px"/>
+				  <figcaption>sky/CBspheres_lambertian.dae with light sampling</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="wall-e_H_16_8.png" width="400px"/>
+				  <figcaption>sky/wall-e.dae with uniform hemisphere sampling</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="CBspheresl_16_8.png" width="400px"/>
+				  <figcaption>sky/wall-e.dae with light sampling</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+		Notice that wall-e.dae with uniform hemisphere sampling shows up entirely dark. This is likely because there are no area lights 
+		in the scene whereas the other two scenes had area lights.
+
+		<!-- Focus on one particular scene with at least one area light and compare the noise levels in soft shadows
+		 when rendering with 1, 4, 16, and 64 light rays, with one sample per pixel and using light sampling -->
+		
+		<!-- Compare the results between uniform hemisphere sampling and lighting sampling in one paragraph -->
 
 		<h2>Part 4: Global Illumination</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
