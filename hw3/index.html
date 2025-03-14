@@ -253,6 +253,31 @@
 
 		<!-- Focus on one particular scene with at least one area light and compare the noise levels in soft shadows
 		 when rendering with 1, 4, 16, and 64 light rays, with one sample per pixel and using light sampling -->
+		 <p>Here is sky/CBbunny.dae rendered with 1 sample per pixel and varying amounts of light rays.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1_1.png" width="400px"/>
+				  <figcaption>l = 1</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1_4.png" width="400px"/>
+				  <figcaption>l = 4</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1_16.png" width="400px"/>
+				  <figcaption>l = 16</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1_64.png" width="400px"/>
+				  <figcaption>l = 64</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 		
 		<!-- Compare the results between uniform hemisphere sampling and lighting sampling in one paragraph -->
 
