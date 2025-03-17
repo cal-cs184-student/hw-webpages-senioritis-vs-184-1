@@ -416,9 +416,9 @@
 		Additionally, the shadows in the image become slightly more colored. The wall edges and corners become less black and more gray. The left side shadow of the bunny takes on red hues while the right side shadow takes on blue hues, matching the 
 		color of the wall near the bunny. This is due to the increased indirect lighting allowed by the additional bounce. With just rasterization, we don't have a way of capturing effects
 		from indirect lighting on the subject, making the rendered image lack the detail provided by indirect lighting.
-
+		<br>
 		In unaccumulated bounces, the larger the ray depth the darker the image. This is due to the amount of indirect lighting decreasing with each bounce.
-		In contrast, the rendered images for accumulated bounces get brighter as max_ray_depth increases.
+		In contrast, the rendered images for accumulated bounces get brighter as max_ray_depth increases due to a greater amount of light being considered.
 
 		<!-- For CBbunny.dae, output the Russian Roulette rendering. -->
 		<p>Here is sky/CBbunny.dae rendered with Russian Roulette, 1024 samples per pixel, and varying max_ray_depth.</p>
