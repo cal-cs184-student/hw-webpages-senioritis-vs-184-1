@@ -148,7 +148,7 @@
 		the code must iterate through every primitive in the singular node, which is very costly when there are a lot of primitives (such as in large meshes).
 		The benefit of a BVH is that only leaf nodes hold a small group of primitives and subtrees that the ray doesn't intersect are skipped entirely,
 		so significantly fewer primitives are traversed. The scene is thus able to be rendered much more quickly.
-		<p>Here are some images with normal shading generated from large .dae files.</p>
+		<p>Here are some rendering times for images without and with BVH.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
@@ -253,7 +253,7 @@
 
 		<!-- Focus on one particular scene with at least one area light and compare the noise levels in soft shadows
 		 when rendering with 1, 4, 16, and 64 light rays, with one sample per pixel and using light sampling -->
-		 <p>Here is sky/CBbunny.dae rendered with 1 sample per pixel and varying amounts of light rays.</p>
+		<p>Here is sky/CBbunny.dae rendered with 1 sample per pixel and varying amounts of light rays.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
@@ -288,7 +288,200 @@
 		 However, lighting sampling is slower than uniform hemisphere sampling, which is especially for large amounts of light rays.
 
 		<h2>Part 4: Global Illumination</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<!-- Walk through implementation of indirect lighting function -->
+
+		<!-- Show some images rendered with global illumination. Use 1024 samples per pixel. -->
+		<p>Here are some images rendered with global illumination and 1024 samples per pixel.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1_1.png" width="400px"/>
+				  <figcaption>l = 1</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1_4.png" width="400px"/>
+				  <figcaption>l = 4</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1_16.png" width="400px"/>
+				  <figcaption>l = 16</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1_64.png" width="400px"/>
+				  <figcaption>l = 64</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+		<!-- Pick one scene and compare rendered views first with only direct illumination, then only indirect illumination -->
+		<p>Here is sky/CBspheres_lambertian.dae rendered first with only direct illumination (left) and then only indirect illumination (right).</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="spheres_1024_direct.png" width="400px"/>
+				  <figcaption>Only direct illumination</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="spheres_1024_indirect.png" width="400px"/>
+				  <figcaption>Only indirect illumination</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+		<!-- For CBbunny.dae, render the mth bounce of light with isAccumBounces=false. Explain what you see for the 2nd and 3rd
+		 bounce of light, and how it contributes to the quality of the rendered image compared to rasterization. -->
+		<!-- Compare rendered views of accumulated and unaccumulated bounces for CBbunny.dae-->
+		<p>Here is sky/CBbunny.dae rendered with 1024 samples per pixel and varying max_ray_depth. Left is unaccumulated and right is accumulated.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m0.png" width="400px"/>
+				  <figcaption>m = 0, unaccumulated</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m0_a.png" width="400px"/>
+				  <figcaption>m = 0, accumulated</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m1.png" width="400px"/>
+				  <figcaption>m = 1, unaccumulated</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m1_a.png" width="400px"/>
+				  <figcaption>m = 1, accumulated</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m2.png" width="400px"/>
+				  <figcaption>m = 2, unaccumulated</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m2_a.png" width="400px"/>
+				  <figcaption>m = 2, accumulated</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m3.png" width="400px"/>
+				  <figcaption>m = 3, unaccumulated</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m3_a.png" width="400px"/>
+				  <figcaption>m = 3, accumulated</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m4.png" width="400px"/>
+				  <figcaption>m = 4, unaccumulated</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m4_a.png" width="400px"/>
+				  <figcaption>m = 4, accumulated</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m5.png" width="400px"/>
+				  <figcaption>m = 5, unaccumulated</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m5_a.png" width="400px"/>
+				  <figcaption>m = 5, accumulated</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+		<!-- For CBbunny.dae, output the Russian Roulette rendering. -->
+		<p>Here is sky/CBbunny.dae rendered with Russian Roulette, 1024 samples per pixel, and varying max_ray_depth.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m0_rr.png" width="400px"/>
+				  <figcaption>m = 0</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m1_rr.png" width="400px"/>
+				  <figcaption>m = 1</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m2_rr.png" width="400px"/>
+				  <figcaption>m = 2</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m3_rr.png" width="400px"/>
+				  <figcaption>m = 3</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m4_rr.png" width="400px"/>
+				  <figcaption>m = 4</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="CBbunny_1024_m100_rr.png" width="400px"/>
+				  <figcaption>m = 100</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+		<!-- Pick one scene and compare rendered views with various sample-per-pixel rates.-->
+		<p>Here is sky/CBspheres_lambertian.dae rendered with various sample-per-pixel rates and 4 light rays.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="spheres_1_4.png" width="400px"/>
+				  <figcaption>s = 1</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="spheres_2_4.png" width="400px"/>
+				  <figcaption>s = 2</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="spheres_4_4.png" width="400px"/>
+				  <figcaption>s = 4</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="spheres_8_4.png" width="400px"/>
+				  <figcaption>s = 8</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="spheres_16_4.png" width="400px"/>
+				  <figcaption>s = 16</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="spheres_64_4.png" width="400px"/>
+				  <figcaption>s = 64</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="spheres_1024_4.png" width="400px"/>
+				  <figcaption>s = 1024</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
 		<h2>Part 5: Adaptive Sampling</h2>
 		My implementation of adaptive sampling follows the spec closely. Before I start iterating, I set up a counter variable that is initialized to 1 as we are looping from 1 to n, inclusive.
@@ -341,17 +534,5 @@
 
 		<h2>(Optional) Part 6: Extra Credit Opportunities</h2>
 		N/A
-		
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
-			</li>
-		</ul>
-		</div>
 	</body>
 </html>
