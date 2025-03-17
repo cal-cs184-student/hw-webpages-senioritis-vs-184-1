@@ -289,6 +289,12 @@
 
 		<h2>Part 4: Global Illumination</h2>
 		<!-- Walk through implementation of indirect lighting function -->
+		My implementation follows the pseudocode from Lecture 13. In each call to at_least_one_bounce_radiance, I first add one_bounce_radiance (i.e. direct lighting) to L_out.
+		Then, before proceeding further, I check if the current ray's depth is 0 or 1 because in those cases, there is no point in recursing further and we can just return.
+		Next, I sample an incident light direction along with its corresponding pdf and reflectance. I use this sampled incident light direction, along with the hit point 
+		of the current ray to create a new ray. If this new ray doesn't intersect the scene's BVH, we can just return. Otherwise, we calculate the indirect lighting by 
+		calling at_least_one_bounce_radiance recursively on our new ray and new intersection and plug the value into the reflectance equation. The last step is to return the summation 
+		of the direct and indirect lighting. Finally, I modified est_radiance_global_illumination to now include at_least_one_bounce_radiance in place of one_bounce_radiance.
 
 		<!-- Show some images rendered with global illumination. Use 1024 samples per pixel. -->
 		<p>Here are some images rendered with global illumination and 1024 samples per pixel.</p>
@@ -333,6 +339,10 @@
 			  </tr>
 			</table>
 		</div>
+		In direct illumination, only the light source itself and one-bounce radiance is considered. Because of this, the ceiling of the image is completely black 
+		except for the light (as there is no way for the light from the source to reach the wall it's on) and the shadows of the spheres are solid black. Additionally, the spheres only become darker gray/black the further the surface is from the light source. 
+		In the indirect illumination image, while there is no light from the light source nor is there one-bounce radiance (thus making the light source and the tops of the spheres dark and causing the spheres' shadows to become small),
+		 we still see light on the underside of the spheres. Additionally, there is some colored shading on the sides of the spheres matching the color of the walls, indicating that light is reflecting off the walls.
 
 		<!-- For CBbunny.dae, render the mth bounce of light with isAccumBounces=false. Explain what you see for the 2nd and 3rd
 		 bounce of light, and how it contributes to the quality of the rendered image compared to rasterization. -->
@@ -402,6 +412,13 @@
 			  </tr>
 			</table>
 		</div>
+		When the images for accumulated max_ray_depth = 2 and max_ray_depth = 3 are compared side-by-side, one can see that the image for max_ray_depth is slightly brighter.
+		Additionally, the shadows in the image become slightly more colored. The wall edges and corners become less black and more gray. The left side shadow of the bunny takes on red hues while the right side shadow takes on blue hues, matching the 
+		color of the wall near the bunny. This is due to the increased indirect lighting allowed by the additional bounce. With just rasterization, we don't have a way of capturing effects
+		from indirect lighting on the subject, making the rendered image lack the detail provided by indirect lighting.
+
+		In unaccumulated bounces, the larger the ray depth the darker the image. This is due to the amount of indirect lighting decreasing with each bounce.
+		In contrast, the rendered images for accumulated bounces get brighter as max_ray_depth increases.
 
 		<!-- For CBbunny.dae, output the Russian Roulette rendering. -->
 		<p>Here is sky/CBbunny.dae rendered with Russian Roulette, 1024 samples per pixel, and varying max_ray_depth.</p>
@@ -482,6 +499,10 @@
 			  </tr>
 			</table>
 		</div>
+
+		When only one sample is taken per pixel, the rendered image appears very noisy. The noise decreases as the sample-per-pixel rate increases, with the image corresponding to 
+		1024 samples per pixel looking very clean. Additionally, the details of the image (edges, shadows, etc) become sharper and smoother as the sample rate increases. The shadows in the s = 1 image 
+		appear very dark, rough and, grainy but the s = 1024 image does not have this issue.
 
 		<h2>Part 5: Adaptive Sampling</h2>
 		My implementation of adaptive sampling follows the spec closely. Before I start iterating, I set up a counter variable that is initialized to 1 as we are looping from 1 to n, inclusive.
