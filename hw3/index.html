@@ -291,10 +291,56 @@
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 		<h2>Part 5: Adaptive Sampling</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		My implementation of adaptive sampling follows the spec closely. Before I start iterating, I set up a counter variable that is initialized to 1 as we are looping from 1 to n, inclusive.
+		I additionally set up two variables s1 and s2, the former of which stores the summation of samples x_k and the latter storing the summation of squared samples (x_k)^2.
+		For each iteration of the loop, I take a sample and get its radiance. From this I get the sample's illuminance using Vector3D's illum() method and update s1 and s2 accordingly.
+		Then, if our current number of samples is a multiple of samplesPerBatch, we check the convergence of the pixel. First we calculate the mean and variance using the formulas from Tip 2 of the spec.
+		These values are then used to calculate I and maxTolerance * mu. If I is less than or equal to maxTolerance * mu, we break out of the loop as we assume the pixel has converged. The rest of the method proceeds as previously implemented.
+		<p>Here is sky/CBbunny.dae with adaptive sampling.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+				<tr>
+					<td style="text-align: center;">
+						<img src="bunny-adaptive.png" width="400px"/>
+						<figcaption>sky/CBbunny.dae with adaptive sampling</figcaption>
+					</td>
+					<td style="text-align: center;">
+						<img src="CBbunny_1_4.png" width="400px"/>
+						<figcaption>Sample rates for different parts of sky/CBbunny.dae</figcaption>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		In the table below I have included two scenes rendered with adaptive sampling. Notice how areas that have few color or lighting changes converge more quickly (thus have fewer samples) than areas with more changes. Blue means that few samples were taken whereas red indicates that more samples were taken.
+		<p>Here are some scenes rendered with 2048 samples per pixel, 1 sample per light, and max ray depth of 5. Notice the differences in the amount of samples between portions of the images</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="dragon-adaptive.png" width="400px"/>
+				  <figcaption>sky/dragon.dae with adaptive sampling</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="dragon_adaptive_rate.png" width="400px"/>
+				  <figcaption>Sample rates for different parts of sky/dragon.dae</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="blob_adaptive.png" width="400px"/>
+				  <figcaption>sky/blob.dae with adaptive sampling</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="blob_adaptive_rate.png" width="400px"/>
+				  <figcaption>Sample rates for different parts of sky/blob.dae</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
 		<h2>(Optional) Part 6: Extra Credit Opportunities</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		N/A
 		
 		<h2>Additional Notes (please remove)</h2>
 		<ul>
