@@ -59,9 +59,10 @@
 		 of the sensor plus the relative positions of x and y in the sensor. This is done because we have the offset of the arguments from the bottom-left corner
 		 but we need to incorporate the position of the sensor itself. The position of the camera is already given in world space so we just transform the direction vector into world space.
 		 We then use the camera position and normalized direction vector in world space to create the ray that will be returned. Before doing so, we update the min_t and max_t of the newly created ray.
-
+		<br>
 		 To generate estimate the radiance over a pixel, we generate ns_aa pixel samples over the pixel corresponding to the passed-in x and y values.
 		 These samples are used to generate sample rays, whose estimated global illuminations are summed up and averaged to generate the Monte Carlo estimate of the pixel's value.
+		<br>
 
 		<!-- Explain the triangle intersection alg you implemented in your own words -->
 		 The second half of Part 1 covers ray-object intersections. The first is Ray-Triangle intersection. My implementation
@@ -70,12 +71,12 @@
 		 Using the two values to calculate the third and incorporating the vertices of the triangle gave me the intersection point.
 		 There were two methods that I implemented for ray-triangle intersection. Both return a boolean indicating whether an intersection exists
 		 and update the max_t of the ray but only one of them updates an Intersection object (and does another barycentric interpolation on the vertex normals in the process).
-
+		<br>
 		 The second ray-object intersection is ray-sphere intersection. This time I used the formula from the lecture slides and solved the quadratic equation to get the intersection time(s) if they exist.
 		 I update max_t to be the smaller of the times, bounded by min_t and max_t. As with ray-triangle intersection, implementing this intersection required implementing two methods
 		 in which ony one updates an Intersection object. This intersection did not require interpolation as the normal could be calculated from the sphere center and intersection point. Additionally,
 		 I used a helper method to determine whether a valid intersection existed, and if so, update max_t and determine the min intersection time.
-
+		<br>
 		<!-- Show images with normal shading for a few small .dae files -->
 		 According to Ed, in order to have normal shading we needed to modify PathTracer::est_radiance_global_illumination(cost Ray &r).
 		 However, I compared the code on my end against the code block on Ed and they were identical so I didn't end up changing anything.
