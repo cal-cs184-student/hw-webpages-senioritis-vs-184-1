@@ -53,33 +53,32 @@
 
 		<h2>Part 1: Ray Generation and Scene Intersection</h2>
 		<!-- Walk through ray generation and primitive intersection parts of the rendering pipeline -->
-		 Ray generation involves taking in normalized x and y coordinates in image space and transforming them into camera space.
+		 <p>Ray generation involves taking in normalized x and y coordinates in image space and transforming them into camera space.
 		 As the image is mapped to the virtual camera sensor, the relative positions of the input arguments relative to the normalized width and height of the image
 		 will determine their relative positions on the sensor. Once these values have been calculated, a ray is generated with direction equal to the bottom left corner
 		 of the sensor plus the relative positions of x and y in the sensor. This is done because we have the offset of the arguments from the bottom-left corner
 		 but we need to incorporate the position of the sensor itself. The position of the camera is already given in world space so we just transform the direction vector into world space.
-		 We then use the camera position and normalized direction vector in world space to create the ray that will be returned. Before doing so, we update the min_t and max_t of the newly created ray.
-		<br>
-		 To generate estimate the radiance over a pixel, we generate ns_aa pixel samples over the pixel corresponding to the passed-in x and y values.
-		 These samples are used to generate sample rays, whose estimated global illuminations are summed up and averaged to generate the Monte Carlo estimate of the pixel's value.
-		<br>
+		 We then use the camera position and normalized direction vector in world space to create the ray that will be returned. Before doing so, we update the min_t and max_t of the newly created ray.</p>
+		
+		<p>To generate estimate the radiance over a pixel, we generate ns_aa pixel samples over the pixel corresponding to the passed-in x and y values.
+		These samples are used to generate sample rays, whose estimated global illuminations are summed up and averaged to generate the Monte Carlo estimate of the pixel's value.</p>
 
 		<!-- Explain the triangle intersection alg you implemented in your own words -->
-		 The second half of Part 1 covers ray-object intersections. The first is Ray-Triangle intersection. My implementation
+		 <p>The second half of Part 1 covers ray-object intersections. The first is Ray-Triangle intersection. My implementation
 		 of ray-triangle intersection is essentially the Moller-Trumbore algorithm. I first calculate E1, E2, S, S1, and S2.
 		 Then I use the Moller-Trumbore algorithm to obtain the time t of intersection along with two of the three values for barycentric interpolation.
 		 Using the two values to calculate the third and incorporating the vertices of the triangle gave me the intersection point.
 		 There were two methods that I implemented for ray-triangle intersection. Both return a boolean indicating whether an intersection exists
-		 and update the max_t of the ray but only one of them updates an Intersection object (and does another barycentric interpolation on the vertex normals in the process).
-		<br>
-		 The second ray-object intersection is ray-sphere intersection. This time I used the formula from the lecture slides and solved the quadratic equation to get the intersection time(s) if they exist.
+		 and update the max_t of the ray but only one of them updates an Intersection object (and does another barycentric interpolation on the vertex normals in the process). </p>
+		
+		<p> The second ray-object intersection is ray-sphere intersection. This time I used the formula from the lecture slides and solved the quadratic equation to get the intersection time(s) if they exist.
 		 I update max_t to be the smaller of the times, bounded by min_t and max_t. As with ray-triangle intersection, implementing this intersection required implementing two methods
 		 in which ony one updates an Intersection object. This intersection did not require interpolation as the normal could be calculated from the sphere center and intersection point. Additionally,
-		 I used a helper method to determine whether a valid intersection existed, and if so, update max_t and determine the min intersection time.
-		<br>
+		 I used a helper method to determine whether a valid intersection existed, and if so, update max_t and determine the min intersection time. </p>
+		
 		<!-- Show images with normal shading for a few small .dae files -->
-		 According to Ed, in order to have normal shading we needed to modify PathTracer::est_radiance_global_illumination(cost Ray &r).
-		 However, I compared the code on my end against the code block on Ed and they were identical so I didn't end up changing anything.
+		 <p>According to Ed, in order to have normal shading we needed to modify PathTracer::est_radiance_global_illumination(cost Ray &r).
+		 However, I compared the code on my end against the code block on Ed and they were identical so I didn't end up changing anything. </p>
 
 		 <p>Here are some images with normal shading generated from small .dae files.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
@@ -108,14 +107,14 @@
 		</div>
 		
 		<h2>Part 2: Bounding Volume Hierarchy</h2>
-		My BVH construction algorithm first constructs the bounding box of all primitives in the node. As my BVH's heuristic is average centroid,
+		<p>My BVH construction algorithm first constructs the bounding box of all primitives in the node. As my BVH's heuristic is average centroid,
 		I count up the number of primitives in the node and find the average centroid of these primitives at the same time. I then create a new node with 
 		the bounding box of all node primitives. If there are fewer than max_leaf_size primitives in the current node, we know our new node is a leaf node, 
 		so we set its start and end pointers with the start and end arguments passed in to the method. If there are > max_leaf_size primitives,
 		we need to find the left and right child of the node. In order to do so, we must split the primitives into two groups (one for the left subtree and one for the right subtree).
 		I choose the axis to split on based on which of x, y, or z of the overall bounding box is the largest. Once this is found, I compare the centroid of 
 		each primitive's bounding boxes. If the centroid[axis] is less than the splitting value, the primitive will go into the left subtree. Otherwise it goes into the right.
-		Finally I call the BVH construction method recursively with each list to get the left and right children. 
+		Finally I call the BVH construction method recursively with each list to get the left and right children. </p>
 
 		<p>Here are some images with normal shading generated from large .dae files.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
@@ -143,12 +142,12 @@
 			</table>
 		</div>
 
-		There were noticeable speedups when BVH was used versus when it wasn't. Larger files would frequently take minutes
+		<p>There were noticeable speedups when BVH was used versus when it wasn't. Larger files would frequently take minutes
 		to render without the BVH, whereas they would only take less than a tenth of a second with the BVH. Exact time differences
 		for four different medium-sized scenes can be seen in the table below. This happens because in the non-BVH implementation,
 		the code must iterate through every primitive in the singular node, which is very costly when there are a lot of primitives (such as in large meshes).
 		The benefit of a BVH is that only leaf nodes hold a small group of primitives and subtrees that the ray doesn't intersect are skipped entirely,
-		so significantly fewer primitives are traversed. The scene is thus able to be rendered much more quickly.
+		so significantly fewer primitives are traversed. The scene is thus able to be rendered much more quickly.</p>
 		<p>Here are some rendering times for images without and with BVH.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
@@ -198,20 +197,20 @@
 
 		<h2>Part 3: Direct Illumination</h2>
 		<!-- Walk through both implementations of the direct lighting function -->
-		 I first set up the BSDF for diffuse materials as it would be used throughout Part 3. The decision to divide by pi 
+		 <p>I first set up the BSDF for diffuse materials as it would be used throughout Part 3. The decision to divide by pi 
 		 was made from Discussion 07, where BRDF was given as rho / pi. For direct lighting with uniform hemisphere sampling,
 		 I make numLights * samplesPerLight samples total, as we are doing Monte Carlo sampling. For each sample, I sample over the hemisphere to get an object space
 		 vector for the input direction vector w_in. I use this w_in to create a ray to see if it intersects a light source. If 
 		 it does, I calculate the outgoing light using the reflection equation. At the end, I average the sum of the samples' outgoing light 
-		 to get the estimated overall outgoing light.
+		 to get the estimated overall outgoing light.</p>
 
-		 Light sampling differs from hemisphere sampling in that we are sampling from the scene's lights rather than uniformly overa hemisphere.
+		<p> Light sampling differs from hemisphere sampling in that we are sampling from the scene's lights rather than uniformly overa hemisphere.
 		 We iterate over the scene's lights, taking one sample if the current light is a point light source and ns_area_light samples otherwise.
 		 Calling sample_L on the light gives us the resulting radiance, w_in, distance to the light from the hit point, and the pdf corresponding to the sampled direction.
 		 Before we substitute these values into the reflection equation, we need to check whether there is an object between the light and the scene in the sample direction (if 
 		 there is, the scene will be in the shadow for this direction and no light will be added). Only once we've verified that there is no intersection 
 		 do we calculate the outgoing light for the current sample. Once all samples for the current light have been taken, we average them to get the Monte Carlo 
-		 estimate for the light. At the very end once all lights have been iterated over, we sum up the estimates for each light to get the overall estimatated outgoing light.
+		 estimate for the light. At the very end once all lights have been iterated over, we sum up the estimates for each light to get the overall estimatated outgoing light.</p>
 
 		<!-- Show images rendered with both implementations of the direct lighting function -->
 		<p>Here are some images rendered using the direct lighting functions.</p>
@@ -279,23 +278,23 @@
 			  </tr>
 			</table>
 		</div>
-		As the number of light rays increases, the amount of noise decreases. However, the scene also takes longer to render.
+		<p>As the number of light rays increases, the amount of noise decreases. However, the scene also takes longer to render.
 		l = 1 had the most noise and the bunny's shadow was spread out and unfocused. It also appeared to be black regardless of how far it was from the bunny.
 		l = 64 had the least noise (and smoothest result), with a nicely blended shadow around the bunny that decreases in darkness
-		the further away it is from the bunny.
+		the further away it is from the bunny.</p>
 		
 		<!-- Compare the results between uniform hemisphere sampling and lighting sampling in one paragraph -->
-		 In general, lighting sampling produces cleaner results with more nicely blended shadows and less noise than uniform hemisphere sampling.
-		 However, lighting sampling is slower than uniform hemisphere sampling, which is especially for large amounts of light rays.
+		<p> In general, lighting sampling produces cleaner results with more nicely blended shadows and less noise than uniform hemisphere sampling.
+		 However, lighting sampling is slower than uniform hemisphere sampling, which is especially for large amounts of light rays.</p>
 
 		<h2>Part 4: Global Illumination</h2>
 		<!-- Walk through implementation of indirect lighting function -->
-		My implementation follows the pseudocode from Lecture 13. In each call to at_least_one_bounce_radiance, I first add one_bounce_radiance (i.e. direct lighting) to L_out.
+		<p>My implementation follows the pseudocode from Lecture 13. In each call to at_least_one_bounce_radiance, I first add one_bounce_radiance (i.e. direct lighting) to L_out.
 		Then, before proceeding further, I check if the current ray's depth is 0 or 1 because in those cases, there is no point in recursing further and we can just return.
 		Next, I sample an incident light direction along with its corresponding pdf and reflectance. I use this sampled incident light direction, along with the hit point 
 		of the current ray to create a new ray. If this new ray doesn't intersect the scene's BVH, we can just return. Otherwise, we calculate the indirect lighting by 
 		calling at_least_one_bounce_radiance recursively on our new ray and new intersection and plug the value into the reflectance equation. The last step is to return the summation 
-		of the direct and indirect lighting. Finally, I modified est_radiance_global_illumination to now include at_least_one_bounce_radiance in place of one_bounce_radiance.
+		of the direct and indirect lighting. Finally, I modified est_radiance_global_illumination to now include at_least_one_bounce_radiance in place of one_bounce_radiance.</p>
 
 		<!-- Show some images rendered with global illumination. Use 1024 samples per pixel. -->
 		<p>Here are some images rendered with global illumination and 1024 samples per pixel.</p>
@@ -413,13 +412,13 @@
 			  </tr>
 			</table>
 		</div>
-		When the images for accumulated max_ray_depth = 2 and max_ray_depth = 3 are compared side-by-side, one can see that the image for max_ray_depth is slightly brighter.
+		<p>When the images for accumulated max_ray_depth = 2 and max_ray_depth = 3 are compared side-by-side, one can see that the image for max_ray_depth is slightly brighter.
 		Additionally, the shadows in the image become slightly more colored. The wall edges and corners become less black and more gray. The left side shadow of the bunny takes on red hues while the right side shadow takes on blue hues, matching the 
 		color of the wall near the bunny. This is due to the increased indirect lighting allowed by the additional bounce. With just rasterization, we don't have a way of capturing effects
-		from indirect lighting on the subject, making the rendered image lack the detail provided by indirect lighting.
-		<br>
-		In unaccumulated bounces, the larger the ray depth the darker the image. This is due to the amount of indirect lighting decreasing with each bounce.
-		In contrast, the rendered images for accumulated bounces get brighter as max_ray_depth increases due to a greater amount of light being considered.
+		from indirect lighting on the subject, making the rendered image lack the detail provided by indirect lighting.</p>
+		
+		<p>In unaccumulated bounces, the larger the ray depth the darker the image. This is due to the amount of indirect lighting decreasing with each bounce.
+		In contrast, the rendered images for accumulated bounces get brighter as max_ray_depth increases due to a greater amount of light being considered.</p>
 
 		<!-- For CBbunny.dae, output the Russian Roulette rendering. -->
 		<p>Here is sky/CBbunny.dae rendered with Russian Roulette, 1024 samples per pixel, and varying max_ray_depth.</p>
@@ -501,16 +500,16 @@
 			</table>
 		</div>
 
-		When only one sample is taken per pixel, the rendered image appears very noisy. The noise decreases as the sample-per-pixel rate increases, with the image corresponding to 
+		<p>When only one sample is taken per pixel, the rendered image appears very noisy. The noise decreases as the sample-per-pixel rate increases, with the image corresponding to 
 		1024 samples per pixel looking very clean. Additionally, the details of the image (edges, shadows, etc) become sharper and smoother as the sample rate increases. The shadows in the s = 1 image 
-		appear very dark, rough and, grainy but the s = 1024 image does not have this issue.
+		appear very dark, rough and, grainy but the s = 1024 image does not have this issue.</p>	
 
 		<h2>Part 5: Adaptive Sampling</h2>
-		My implementation of adaptive sampling follows the spec closely. Before I start iterating, I set up a counter variable that is initialized to 1 as we are looping from 1 to n, inclusive.
+		<p>My implementation of adaptive sampling follows the spec closely. Before I start iterating, I set up a counter variable that is initialized to 1 as we are looping from 1 to n, inclusive.
 		I additionally set up two variables s1 and s2, the former of which stores the summation of samples x_k and the latter storing the summation of squared samples (x_k)^2.
 		For each iteration of the loop, I take a sample and get its radiance. From this I get the sample's illuminance using Vector3D's illum() method and update s1 and s2 accordingly.
 		Then, if our current number of samples is a multiple of samplesPerBatch, we check the convergence of the pixel. First we calculate the mean and variance using the formulas from Tip 2 of the spec.
-		These values are then used to calculate I and maxTolerance * mu. If I is less than or equal to maxTolerance * mu, we break out of the loop as we assume the pixel has converged. The rest of the method proceeds as previously implemented.
+		These values are then used to calculate I and maxTolerance * mu. If I is less than or equal to maxTolerance * mu, we break out of the loop as we assume the pixel has converged. The rest of the method proceeds as previously implemented.</p>
 		<p>Here is sky/CBbunny.dae with adaptive sampling.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
