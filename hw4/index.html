@@ -175,12 +175,65 @@
 
 		<h2>Part 4: Handling self-collisions</h2>
 		<!-- Describe implementation of handling self-collisions-->
+		My implementation of self-collision handling utilizes spatial hashing to repulse point mass pairs that are too close to each other.
+		In order to set up the hash table of 3D box volumes, I figure out which 3D box volume the current point mass belongs to and use that information to generate the 
+		corresponding hashcode. This process is done for each point mass in the cloth. Once we're given a point mass to test for self-collision,
+		we generate its hashcode to retrieve the 3D box volume of nearby points. For each point mass in the 3D box volume, if the point mass is not the input point mass,
+		we dtermine whether the point mass and the input point mass are 2 * thickness apart. If not, we find a correction vector to the input point mass such that the two masses 
+		would be 2 * thickness apart. At the very end, we sum all the correction vectors we found and average them to find the final collision vector. As a final adjustment, we scale down 
+		the final correction vector by simulation_steps.
 
 		<!-- At least 3 screenshots documenting how cloth falls and folds on itself, starting with early, initial self-collision
 		 and ending with the cloth at a more restful state-->
+		<p>Here are screenshots of scene/selfCollision.json at various points in time.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+				<tr>
+				<td style="text-align: center;">
+					<img src="part4-cloth-early.png" width="400px"/>
+					<figcaption>Early self-collision</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="part4-cloth-middle.png" width="400px"/>
+					<figcaption>Intermediate self-collision</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="part4-cloth-restful.png" width="400px"/>
+					<figcaption>Cloth at a more restful state.</figcaption>
+				</td>
+				</tr>
+			</table>
+		</div>
 
 		<!-- Vary the density as well as ks and describe with words and screnshots how they affect the behavior of the cloth
 		 as it falls on itself-->
+		<p>Here is scene/selfCollision.json with varying density and ks.</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			   <tr>
+				<td style="text-align: center;">
+				   <img src="part4-density-low.png" width="400px"/>
+				   <figcaption>low density</figcaption>
+				</td>
+				<td style="text-align: center;">
+				   <img src="part4-density-high.png" width="400px"/>
+				   <figcaption>high density</figcaption>
+				</td>
+			   </tr>
+			   <tr>
+				<td style="text-align: center;">
+				   <img src="part4-ks-low.png" width="400px"/>
+				   <figcaption>low ks</figcaption>
+				</td>
+			   </tr>
+			   <tr>
+				<td style="text-align: center;">
+				   <img src="part4-ks-high.png" width="400px"/>
+				   <figcaption>high ks</figcaption>
+				</td>
+			   </tr>
+			</table>
+		</div>
 
 		<h2>Part 5: Shaders</h2>
 		<!-- Explain what a shader program is and how vertex and fragment shaders work together to create lighting and material effects-->
