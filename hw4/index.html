@@ -28,7 +28,7 @@
 	<body>
 		<div class="container">
 		<h1>CS184/284A Spring 2025 Homework 4 Write-Up</h1>
-		<div style="text-align: center;">Names: </div>
+		<div style="text-align: center;">Names: Ashley Kao</div>
 
 		<br>
 
@@ -90,7 +90,7 @@
 				</td>
 				<td style="text-align: center;">
 				  <img src="part2-high-ks.png" width="400px"/>
-				  <figcaption>high ks.</figcaption>
+				  <figcaption>high ks</figcaption>
 				</td>
 			  </tr>
 			  <tr>
@@ -115,7 +115,7 @@
 			  </tr>
 			</table>
 		</div>
-
+		The cloth is more flexible with low ks and more rigid for high ks.
 		For low damping, the cloth would continually bounce after it had become vertical, likely due to the lack of sufficient energy loss
 		leading to the cloth retaining most of its energy from the fall. With high damping, the cloth's fall became very sluggish. It additionally did not bounce; it moreso fell like a rock.
 
@@ -125,13 +125,80 @@
 		</figure>
 
 		<h2>Part 3: Handling collisions with other objects</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<!-- Describe implementation of handling collisions with spheres and planes. -->
+		<p>My implementation for collision with spheres and planes follows the outline in the spec. For spheres, I first figure out where the point 
+		currently is relative to the center of the sphere. If the distance between point and sphere is greater than the radius, then the point 
+		is outside the sphere and nothing needs to be done. Otherwise, I determine where the tangent point was by extending a vector from sphere center to point position
+		outward to the sphere's surface. Next, using this tangent point, I figure out the correction vector needed to adjust the point mass's last_position such that rather than 
+		going to the inside of the sphere, the point mass ends up exactly at the tangent point. Finally, I set the point mass's position to be the sum of its last_position and 
+		the scaled down (due to friction) correction vector.</p>
+		
+		<p>Checking whether a point mass made a collision is somewhat more complex in the plane case. For both the point mass's position and last_position,
+			I find the distance between the respective position and the plane. The value from the equation indicates where the point is relative to the plane: if it is 0 the point is on the plane 
+			but otherwise the point mass is to a side of the plane. If the values have the same sign, then the point is on the same side of the plane so no collision occured and nothing needs to be done.
+			Otherwise, we continue with collision handling as outlined by the spec. The next step is to project the point mass's position onto the plane so the tangent point can be found using our known points and vectors.
+			Once the tangent point has been found, I compute the correction vector while incorporating the small SURFACE_OFFSET constant to 
+			determine the point mass's new position. This final step is very similar to the final step for spheres. 
+		</p>
+
+		<!-- Screenshots of shaded cloth from scene/sphere.json in final resting state on sphere with default ks=5000, ks=500,
+		 and ks=50000. Describe the differences in results.-->
+		<p>Here are screenshots of scene/sphere.json with varying ks</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			   <tr>
+				<td style="text-align: center;">
+				   <img src="part3-ks500.png" width="400px"/>
+				   <figcaption>ks = 500</figcaption>
+				</td>
+				<td style="text-align: center;">
+				   <img src="part3-ks5000.png" width="400px"/>
+				   <figcaption>ks = 5000</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="part3-ks50000.png" width="400px"/>
+					<figcaption>ks = 50000</figcaption>
+				</td>
+			   </tr>
+			</table>
+		 </div>
+		<p>Lower ks gives more flexibility to the cloth, so more folds are visible when it is draped over the sphere.
+			In contrast, with high ks the cloth becomes very stiff so it no longer drapes smoothly over the sphere. Instead,
+			it folds slightly over the top of the sphere but otherwise sticks out to the side.
+		</p>
+
+		 <!-- Screenshot of shaded cloth lying peacefully at rest on the plane.-->
+		<figure>
+			<img src="part3-plane.png" alt="Cloth on plane" style="width:70%"/>
+			<figcaption>Screenshot of cloth at rest on plane.</figcaption>
+		</figure>
 
 		<h2>Part 4: Handling self-collisions</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<!-- Describe implementation of handling self-collisions-->
+
+		<!-- At least 3 screenshots documenting how cloth falls and folds on itself, starting with early, initial self-collision
+		 and ending with the cloth at a more restful state-->
+
+		<!-- Vary the density as well as ks and describe with words and screnshots how they affect the behavior of the cloth
+		 as it falls on itself-->
 
 		<h2>Part 5: Shaders</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<!-- Explain what a shader program is and how vertex and fragment shaders work together to create lighting and material effects-->
+
+		<!-- Explain the Blinn-Phong shading model. Show a screenshot of your Blinn-Phong shader outputting only the
+		 ambient component, only the diffuse component, only the specular component, and one using the entire Blinn-Phong model-->
+
+		<!-- Show screenshot of texture mapping shader using your own custom texture by modifying the textures in /textures/.-->
+
+		<!-- Show screenshot of bump mapping on the cloth and on the sphere. Show a screenshot of displacement mapping on the sphere.
+		 Use the same texture for both renders. You can either provide your own texture or use one of the ones in the textures
+		 directory, BUT choose one that's not the default texture_2.png. Compare the two approaches and renders in your own words.
+		 Compare how youir two shaders react to the sphere by changing the sphere mesh's coarseness by using -o 16 -a 16
+		 and then -o 128 -a 128.-->
+
+		<!-- Show a screenshot of your mirror shader on the cloth and on the sphere-->
+
+		<!-- Explain what you did in your custom shader, if you made one.-->
 
 		<h2>(Optional) Part 6: Extra Credit - Additional cloth simulation features!</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
