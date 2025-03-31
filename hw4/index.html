@@ -239,9 +239,40 @@
 
 		<h2>Part 5: Shaders</h2>
 		<!-- Explain what a shader program is and how vertex and fragment shaders work together to create lighting and material effects-->
+		<p>A shader program runs portions of the graphics pipeline in parallel on the GPU, enabling acceleration of frame rendering. It outputs a single four-dimensional vector.
+		Vertex shaders apply transforms to vertices and write values that will be used as inputs to fragment shaders. For example, Displacement.vert 
+		writes the values of v_position, v_normal, v_uv, and v_tangent, which are the inputs to Displacement.frag.</p>
 
 		<!-- Explain the Blinn-Phong shading model. Show a screenshot of your Blinn-Phong shader outputting only the
 		 ambient component, only the diffuse component, only the specular component, and one using the entire Blinn-Phong model-->
+		The Blinn-Phong shading model takes a weighted sum of ambient lighting (constant shading), diffuse lighting (light uniformly scattered in all directions),
+		 and specular lighting (bright shading near mirror reflection direction) to determine the output light.
+
+		 <p>Here is scene/sphere.json with varying Phong shading.</p>
+		 <div style="display: flex; flex-direction: column; align-items: center;">
+			 <table style="width: 100%; text-align: center; border-collapse: collapse;">
+				<tr>
+				 <td style="text-align: center;">
+					<img src="part5-phong-ambient.png" width="400px"/>
+					<figcaption>ambient shading only</figcaption>
+				 </td>
+				 <td style="text-align: center;">
+					<img src="part5-phong-diffuse.png" width="400px"/>
+					<figcaption>diffuse shading only</figcaption>
+				 </td>
+				</tr>
+				<tr>
+				 <td style="text-align: center;">
+					<img src="part5-phong-specular.png" width="400px"/>
+					<figcaption>specular shading only</figcaption>
+				 </td>
+				 <td style="text-align: center;">
+					<img src="part5-phong-all.png" width="400px"/>
+					<figcaption>full Phong shading</figcaption>
+				 </td>
+				</tr>
+			 </table>
+		 </div>
 
 		<!-- Show screenshot of texture mapping shader using your own custom texture by modifying the textures in /textures/.-->
 
