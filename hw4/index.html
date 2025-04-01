@@ -368,6 +368,20 @@
 				</tr>
 			 </table>
 		 </div>
+		 <p>Bump mapping creates the illusion of details on objects by modifying the object's normal vector.
+			However, it doesn't modify the vertices of the object. For example, in the rendered sphere, there is 
+			the illusion of bumps on its surface. However, we can see that the sphere itself is still round, which 
+			makes the texture a little unrealistic. Displacement mapping builds upon bump mapping by incorporating 
+			vertex position changes. This gives the object surface ridges and dips that make it more realistic. As 
+			displacement mapping requires additional computation over bump mapping, it can be slower than bump mapping.
+		 </p>
+		 <p>The differences between resolution 16 and resolution 128 on the bump mapping image were fairly small. The 
+			most conspicuous one was that the sphere in the resolution 128 case appeared to be slightly larger than its 
+			resolution 16 counterpart. The differences in the displacement mapping images were more visible. In the -o 16 -a 16 image,
+			there are fewer bumps and they appear to be a little smoothed out. In the -o 128 -a 128 image, there are more detailed bumps.
+			Of course, the above observations could be due to the fact that my custom texture image didn't have the best resolution 
+			so the resulting cloth and sphere textures were rather pixelated to begin with.
+		 </p>
 
 		<!-- Show a screenshot of your mirror shader on the cloth and on the sphere-->
 		<p>Here is my mirror shader.</p>
